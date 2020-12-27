@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 from forms import LBForm, FWForm, FWVPNForm
+import sys
+sys.path.append('/src/flaskr')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '3+ZN34jTvhNRNgTCN5mBCXMkSQ3daM7/wlk3NGIJZpw='
