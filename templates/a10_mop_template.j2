@@ -21,7 +21,6 @@ enable
 active-partition {{ form.partition.data }}
 config t
 
-
 {% for pool in form.pools.data -%}
 slb service-group {{ pool.poolName }} tcp
   method {{ pool.LBMethod }}
@@ -29,6 +28,13 @@ slb service-group {{ pool.poolName }} tcp
 {% for member in pool.members -%}
   member ip-{{ member.memberIP }} {{ member.memberPort }}
 {% endfor %}
+{% endfor %}
+
+{% for p in form.profiles.data -%}
+slb template client-ssl {{ p.profileName }}
+cert {{ p.certName }}
+key {{ p.keyName }}
+chain-cert {{ p.chainCertName }}
 {% endfor %}
 
 {% for virtual in form.virtuals.data -%}
@@ -58,6 +64,10 @@ show slb service-group {{ pool.poolName }}
 show slb virtual {{ virtual.virtualName }}
 {% endfor %}
 
+{% for p in form.profiles.data -%}
+show slb profile client-ssl {{ p.profileName }}
+{% endfor %}
+
 Documentation:
 
 {% for pool in form.pools.data -%}
@@ -68,17 +78,26 @@ show run slb service-group {{ pool.poolName }}
 show run slb virtual {{ virtual.virtualName }}
 {% endfor %}
 
+{% for p in form.profiles.data -%}
+show run slb profile client-ssl {{ p.profileName }}
+{% endfor %}
+
 Communication:**
     {{ form.customerEmail.data }} {{ form.customerPhone.data }}
 
 ========== Contingency/Backout Plan ==========
 
-{% for pool in form.pools.data -%}
-delete ltm pool {{ pool.poolName }}
+{% for virtual in form.virtuals.data -%}
+slb virtual-server {{ virtual.virtualName }} {{ virtual.destination }}
+  no port {{ virtual.serviceport }} http
 {% endfor %}
 
-{% for virtual in form.virtuals.data -%}
-delete ltm virtual {{ virtual.virtualName }}
+{% for pool in form.pools.data -%}
+no slb service-group {{ pool.poolName }} tcp
+{% endfor %}
+
+{% for p in form.profiles.data -%}
+no slb template client-ssl {{ p.profileName }}
 {% endfor %}
 
 ========== Created by MOPR <<datestamp>>
