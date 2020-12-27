@@ -46,6 +46,16 @@ New Members
 Click Finished
 {% endfor %}
 
+{% for p in form.profiles.data -%}
+Local Traffic  ››  Profiles : Client SSL Profiles  ››  New Client SSL Profile...
+Name: {{ p.profileName }}
+Certificate: {{ p.certName }}
+Key: {{ p.keyName }}
+Chain Cert: {{ p.chainCertName }}
+Click Finished
+{% endfor %}
+
+
 {% for virtual in form.virtuals.data -%}
 Local Traffic  ››  Virtual Servers : Virtual Server List  ››  New Virtual Server...
 Name: {{ virtual.virtualName }}
@@ -71,6 +81,10 @@ show ltm pool {{ pool.poolName }}
 show ltm virtual {{ virtual.virtualName }}
 {% endfor %}
 
+{% for p in form.profiles.data -%}
+show ltm profile client-ssl {{ p.profileName }}
+{% endfor %}
+
 Documentation:
 
 {% for pool in form.pools.data -%}
@@ -81,19 +95,26 @@ list ltm pool {{ pool.poolName }}
 list ltm virtual {{ virtual.virtualName }}
 {% endfor %}
 
+{% for p in form.profiles.data -%}
+list ltm profile client-ssl {{ p.profileName }}
+{% endfor %}
+
 Communication:**
     {{ form.customerEmail.data }} {{ form.customerPhone.data }}
 
 ========== Contingency/Backout Plan ==========
 
-{% for pool in form.pools.data -%}
-delete ltm pool {{ pool.poolName }}
-{% endfor %}
-
 {% for virtual in form.virtuals.data -%}
 delete ltm virtual {{ virtual.virtualName }}
 {% endfor %}
 
+{% for pool in form.pools.data -%}
+delete ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for p in form.profiles.data -%}
+delete ltm profile client-ssl {{ p.profileName }}
+{% endfor %}
 
 ========== Created by MOPR <<datestamp>>
 </code>

@@ -26,6 +26,17 @@ class PoolForm(Form):
     members = FieldList(FormField(MemberForm), min_entries=1)
 
 
+class SSLProfileForm(Form):
+    profileName = StringField('poolName', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Profile Name'})
+    certName = StringField('poolName', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Certificate Name'})
+    keyName = StringField('poolName', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Key Name'})
+    chainCertName = StringField('poolName', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Chain Cert Name'})
+
+
 class VirtualForm(Form):
     virtualName = StringField('virtualName', render_kw={
         'class': 'form-control-sm', 'placeholder': 'Virtual Name'})
@@ -59,6 +70,7 @@ class LBForm(FlaskForm):
     partition = StringField('partition', render_kw={
         'class': 'form-control-sm', 'placeholder': 'Partition'})
     pools = FieldList(FormField(PoolForm), min_entries=1)
+    profiles = FieldList(FormField(SSLProfileForm), min_entries=0)
     virtuals = FieldList(FormField(VirtualForm), min_entries=1)
     submit = SubmitField('Submit', render_kw={
                          'class': 'btn btn-outline-secondary'})

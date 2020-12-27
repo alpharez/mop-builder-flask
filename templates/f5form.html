@@ -59,6 +59,28 @@
     $("#pools").append(newInput);
   }
 
+  function addSSLProfile() {
+    var lastProfileID = $("#profiles input:last").attr("id");
+    if (lastProfileID == undefined)
+      num = 0
+    else {
+      var num = parseInt(lastProfileID.match(/\d+/)[0])
+      num = num + 1
+    }
+    var newProfileName = "profiles-"+num+"-profileName"
+    var newCertName = "profiles-"+num+"-certName"
+    var newKeyName = "profiles-"+num+"-keyName"
+    var newChainCertName = "profiles-"+num+"-chainCertName"
+    var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
+      +`<input class='form-control-sm' type='text' id='${newProfileName}' name='${newProfileName}' value='' placeholder='Profile Name'></input>`
+      +`<input class='form-control-sm' type='text' id='${newCertName}' name='${newCertName}' value='' placeholder='Certificate Name'></input>`
+      +`<input class='form-control-sm' type='text' id='${newKeyName}' name='${newKeyName}' value='' placeholder='Key Name'></input>`
+      +`<input class='form-control-sm' type='text' id='${newChainCertName}' name='${newChainCertName}' value='' placeholder='Chain Cert Name'></input>`      
+      +`</div></div>`
+    $("#profiles").append(newInput);
+  }
+
+
   function addVip() {
     var lastVIPID = $("#virtuals input:last").attr("id");
     var num = parseInt(lastVIPID.match(/\d+/)[0])
@@ -102,7 +124,7 @@
         <button type="button" id="addLB" class="btn btn-outline-secondary" onclick="addDevice()">Add LB Device</button> 
         <button type="button" id="addPool" class="btn btn-outline-secondary" onclick="addServerPool()">Add Server Pool</button> 
         <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addVip()">Add Virtual</button> 
-        <button type="button" id="addClientSSL" class="btn btn-outline-secondary" onclick="addVip()">Add Client SSL</button> 
+        <button type="button" id="addClientSSL" class="btn btn-outline-secondary" onclick="addSSLProfile()">Add Client SSL</button> 
       </div>
     </div>
   </div>
@@ -142,18 +164,11 @@
   <div class="container">  
     <div class="row"><span class="badge bg-primary">Profiles</span></div>
     <div id="profiles">
-    {% for p in form.pools %}
+    {% for pr in form.profiles %}
     <div class="row g-2 align-items-left">
       <div class="col">
-        {{ p.poolName }}{{ p.LBMethod }}{{ p.Health }}
-        <button type="button" class="btn btn-outline-secondary" onclick="addServerPoolMember(0)">Add Member</button> 
+        {{ pr.profileName }}{{ pr.certName }} {{ pr.keyName }} {{ pr.chainCertName }}
       </div>
-    </div>
-    <div id="poolmembers0">
-      {% for m in p.members %}
-        {{ m.memberIP }}
-        {{ m.memberPort }}
-      {% endfor %}
     {% endfor %}
     </div>
   </div>
