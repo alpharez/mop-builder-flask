@@ -1,24 +1,72 @@
-MOP COMPLETED for {{CRQ}}
+<pre>
+<code>
+MOP COMPLETED for {{ form.changeID.data }}
+
  ####################
 
 ####MOP BEGIN####
 
 Device(s):
-{{ device_name_pri }}
-{{ device_name_sec }}
 
+{% for device in form.devices.data -%}
+     {{ device.deviceName }} {{ device.deviceIP }}
+{% endfor %}
 Communication:**
-   <pre CRQ communication info>
+   ** pre Change communication info **
 
 PreCheck:**
 
 ########## Execution Steps ##########
-s0 goto {{ device_name_pri }}
+s0 goto {{ form.devices[0].data.deviceName }}
 config t
 
-{% for acl in acls -%}
-access-list {{ acl['acl_name'] }} extended {{acl['action'] }} {{ acl['protocol'] }} {{ acl['source'] }} {{ acl['destination'] }} eq {{ acl['port'] }}
+A new VPN configuration on an ASA typically requires the following elements:
+
+1) Object groups defining the local and remote hosts/networks to include in the vpn, and an access-list using these groups to define the encryption domain
+
+{% for objgrp in form.objvpngroups.data -%}
+object-group network {{ objgrp.objName }}
+{% for obj in objgrp.objectList -%}
+ network-object {{ obj.objectIP }} {{ obj.objectMask }}
 {% endfor %}
+{% endfor %}
+
+access-list {{ form.vpnName.data }}_encrypt extended permit ip object-group {{ form.objvpngroups[0].objName.data }} object-group {{ form.objvpngroups[1].objName.data }}
+
+tunnel-group {{ form.peerIP.data }} type ipsec-l2l
+tunnel-group {{ form.peerIP.data }} ipsec-attributes
+pre-shared-key {{ form.p1PSK.data }}
+
+crypto isakmp policy ** NEXTNUM **
+ authentication pre-share
+ encryption {{ form.p1Crypt.data }}
+ hash {{ form.p1Hash.data }}
+ group {{ form.p1DHgroup.data }}
+ lifetime {{ form.p1lifetime.data }}
+ 
+ 
+  -transform set configuration example:
+     crypto ipsec transform-set ESP-AES256-SHA1 esp-aes-256 esp-sha-hmac
+
+crypto map ** MAP NAME / NUMBER ** match address {{ form.vpnName.data }}
+crypto map ** MAP NAME / NUMBER ** set peer {{ form.peerIP.data }}
+crypto map ** MAP NAME / NUMBER ** set transform-set {{ form.p2transform.data }}
+crypto map ** MAP NAME / NUMBER ** set lifetime {{ form.p2lifetime.data }}
+
+{% for rule in form.aclrules.data -%}
+access-list {{ rule.ruleName }} extended permit {{ rule.protocol }} object-group {{ rule.source }} object-group {{ rule.destination }} eq {{ rule.port }}
+{% endfor %}
+
+5) Interface access-list configurations (if needed)
+   -If a clients wants the VPN wide open to all hosts in the encryption domain, the object-groups from step 1 can be used.  More restrictive access will require the use of individual host or network IPs, or new unique object-groups.
+
+6) No-nat or Identity NAT configurations (if needed to bypass existing NAT configurations that would otherwise apply to the VPN traffic)
+   -For 8.2 and older code, use the existing nat 0 (no-nat) access-list
+     Example: access-list no-nat extended permit ip object-group <vpn name>_local object-group <vpn name>_remote
+     NOTE: A no-nat ACL rule should always be for all 'ip' traffic.  Adding a new rule to an existing no-nat ACL using tcp, udp, etc. could result in existing no-nat rules being disabled, and a client outage.
+   -For 8.3 and newer code, create an identity NAT statement
+     Example: nat (inside,outside) source static <vpn name>_local <vpn name>_local destination static <vpn name>_remote <vpn name>_remote no-proxy-arp route-lookup
+
 end
 wr mem
 exit

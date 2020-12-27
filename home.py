@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from forms import LBForm, FWForm
+from forms import LBForm, FWForm, FWVPNForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '3+ZN34jTvhNRNgTCN5mBCXMkSQ3daM7/wlk3NGIJZpw='
@@ -10,13 +10,13 @@ def home():
     return render_template("index.html")
 
 
-@app.route('/fwform', methods=['GET', 'POST'])
+@app.route('/vpnform', methods=['GET', 'POST'])
 def asaform():
-    form = FWForm()
+    form = FWVPNForm()
     if form.is_submitted():
         result = request.form
-        return render_template('asa_mop_template.j2', form=form)
-    return render_template('fwform.html', form=form)
+        return render_template('asa_mop_vpn_template.j2', form=form)
+    return render_template('vpnform.html', form=form)
 
 
 @app.route('/f5form', methods=['GET', 'POST'])

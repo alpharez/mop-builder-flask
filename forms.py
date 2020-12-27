@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FieldList, TextField, Form, FormField, SelectField, DateTimeField, HiddenField
+from wtforms import StringField, SubmitField, FieldList, TextField, Form, FormField, SelectField, DateTimeField, HiddenField, IntegerField, BooleanField
 from datetime import datetime
 
 
@@ -78,21 +78,79 @@ class LBForm(FlaskForm):
                          'class': 'btn btn-outline-secondary'})
 
 
+class ObjForm(Form):
+    objectIP = StringField('objectIP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'IP'})
+    objectMask = StringField('objectMask', render_kw={
+                             'class': 'form-control-sm', 'placeholder': 'Mask'})
+
+
+class ObjGrpForm(Form):
+    objName = StringField('poolName', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Object Group Name'})
+    objectList = FieldList(FormField(ObjForm), min_entries=1)
+
+
+class NATForm(Form):
+    natName = StringField('poolName', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Pool Name'})
+
+
+class ACLForm(Form):
+    ruleName = StringField('change ID', render_kw={
+                           'class': 'form-control-sm', 'placeholder': 'Rule Name'})
+    lineNum = IntegerField('line num', render_kw={
+                           'class': 'form-control-sm', 'placeholder': 'Rule Number'})
+    ruleAction = SelectField('Select Action', choices=[
+        ('permit', 'permit'), ('deny', 'deny')])
+    protocol = SelectField('Select Protocol', choices=[
+        ('tcp', 'tcp'), ('udp', 'udp'), ('ip', 'ip'), ('icmp', 'icmp')])
+    source = StringField('source', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Source'})
+    destination = StringField('change ID', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Destination'})
+    port = IntegerField('line num', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Port'})
+
+
 class FWForm(FlaskForm):
     changeID = StringField('change ID', render_kw={
-                           'class': 'form-control-sm', 'placeholder': 'Change ID'})
-    customerEmail = StringField('change ID', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Change ID'})
+    customerEmail = StringField('Customer Email', render_kw={
         'class': 'form-control-sm', 'placeholder': 'Customer Email'})
-    customerPhone = StringField('change ID', render_kw={
+    customerPhone = StringField('Customer Phone', render_kw={
         'class': 'form-control-sm', 'placeholder': 'Customer Phone'})
     FWType = SelectField('Select Firewall Type', choices=[
-                         ('select', 'Select LB Type'), ('asa', 'Cisco ASA'), ('paloalto', 'Palo Alto'), ('ftd', 'Cisco FTD')])
+        ('select', 'Select LB Type'), ('asa', 'Cisco ASA'), ('paloalto', 'Palo Alto'), ('ftd', 'Cisco FTD')])
     devices = FieldList(FormField(DeviceForm), min_entries=1,
                         render_kw={'class': 'input-group mb-3'})
-    partition = StringField('partition', render_kw={
-        'class': 'form-control-sm', 'placeholder': 'Partition'})
-    objgroups = FieldList(FormField(PoolForm), min_entries=1)
-    aclrules = FieldList(FormField(VirtualForm), min_entries=1)
+    objgroups = FieldList(FormField(ObjGrpForm), min_entries=1)
+    aclrules = FieldList(FormField(ACLForm), min_entries=1)
+    nats = FieldList(FormField(NATForm), min_entries=1)
     timestamp = HiddenField('timestamp', default=datetime.utcnow)
     submit = SubmitField('Submit', render_kw={
-                         'class': 'btn btn-outline-secondary'})
+        'class': 'btn btn-outline-secondary'})
+
+
+class FWVPNForm(FWForm):
+    vpnName = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'VPN Name'})
+    objvpngroups = FieldList(FormField(ObjGrpForm), min_entries=2)
+    peerIP = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'VPN Peer IP'})
+    p1PSK = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'PSK'})
+    p1Hash = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Hash'})
+    p1Crypt = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Encryption'})
+    p1DHgroup = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'DH Group'})
+    p1lifetime = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Lifetime'})
+    p2transform = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Transform Set'})
+    p2lifetime = StringField('Peer IP', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'Lifetime'})
+    noNat = BooleanField('Add NoNat', render_kw={
+        'class': 'form-control-sm', 'placeholder': 'NoNat'})

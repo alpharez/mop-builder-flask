@@ -22,7 +22,7 @@
     $("#devices").append(newInput);
   }
 
-  function addServerPoolMember(num) {
+  function addObjGrpMember(num) {
     // pools-0-members-0-memberIP   // pools-0-members-0-memberPort
     // figure out which button got pressed, then add a new member to that pool
     var poolmembersdiv = `#poolmembers${num}`
@@ -39,7 +39,7 @@
 
   }
 
-  function addServerPool() {
+  function addObjGroup() {
     var lastPoolID = $("#pools input:last").attr("id");
     var num = parseInt(lastPoolID.match(/\d+/)[0])
     num = num + 1
@@ -59,29 +59,25 @@
     $("#pools").append(newInput);
   }
 
-  function addVip() {
-    var lastVIPID = $("#virtuals input:last").attr("id");
-    var num = parseInt(lastVIPID.match(/\d+/)[0])
+  function addAccessRule() {
+    var lastACLID = $("#ACLs input:last").attr("id");
+    var num = parseInt(lastACLID.match(/\d+/)[0])
     num = num + 1
-    var newVIPName = "virtuals-"+num+"-virtualName"
-    var newVIPDest = "virtuals-"+num+"-destination"
-    var newVIPService = "virtuals-"+num+"-serviceport"
-    var newVIPSSLProfile = "virtuals-"+num+"-SSLProfile"
-    var newVIPSNAT = "virtuals-"+num+"-SNAT"
-    var newVIPrules = "virtuals-"+num+"-rules"
-    var newVIPdefaultPool = "virtuals-"+num+"-defaultPool"
-    var newVIPpersistence = "virtuals-"+num+"-persistence"
+    var newACLName = "aclrules-"+num+"-ruleName"
+    var newACLAction = "aclrules-"+num+"-ruleAction"
+    var newACLprotocol = "aclrules-"+num+"-protocol"
+    var newACLsource = "aclrules-"+num+"-source"
+    var newACLdestination = "aclrules-"+num+"-destination"
+    var newACLport = "aclrules-"+num+"-port"
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newVIPName}' name='${newVIPName}' value='' placeholder='Virtual Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPDest}' name='${newVIPDest}' value='' placeholder='Destination'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPService}' name='${newVIPService}' value='' placeholder='Service Port'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPSSLProfile}' name='${newVIPSSLProfile}' value='' placeholder='SSL Profile'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPSNAT}' name='${newVIPSNAT}' value='' placeholder='Source Address Translation'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPrules}' name='${newVIPrules}' value='' placeholder='Rules'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPdefaultPool}' name='${newVIPdefaultPool}' value='' placeholder='Default Server Pool'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPpersistence}' name='${newVIPpersistence}' value='' placeholder='Persistence'></input>`
+      +`<input class='form-control-sm' type='text' id='${newACLName}' name='${newACLName}' value='' placeholder='Rule'></input>`
+      +`<input class='form-control-sm' type='select' id='${newACLAction}' name='${newACLAction}' value='' placeholder='Action'></input>`
+      +`<input class='form-control-sm' type='select' id='${newACLprotocol}' name='${newACLprotocol}' value='' placeholder='Protocol'></input>`
+      +`<input class='form-control-sm' type='text' id='${newACLsource}' name='${newACLsource}' value='' placeholder='Source'></input>`
+      +`<input class='form-control-sm' type='text' id='${newACLdestination}' name='${newACLdestination}' value='' placeholder='Destination'></input>`
+      +`<input class='form-control-sm' type='text' id='${newACLport}' name='${newACLport}' value='' placeholder='Port'></input>`
       +`</div></div>`
-    $("#virtuals").append(newInput);
+    $("#ACLs").append(newInput);
   }
 </script>
 
@@ -93,16 +89,11 @@
     <div class="mb-3">
       {{ form.LBType }}
     </div>
-    <div class="mb-3">
-      {{ form.partition }}
-    </div>
   <div class="container">  
     <div class="mb-3">
       <div id="buttons">
         <button type="button" id="addLB" class="btn btn-outline-secondary" onclick="addDevice()">Add FW Device</button> 
-        <button type="button" id="addPool" class="btn btn-outline-secondary" onclick="addServerPool()">Add Object</button> 
-        <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addVip()">Add Access Rule</button> 
-        <button type="button" id="addClientSSL" class="btn btn-outline-secondary" onclick="addVip()">Add NAT</button> 
+        <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addAccessRule()">Add Access Rule</button> 
       </div>
     </div>
   </div>
@@ -122,36 +113,74 @@
     </div>
   </div>
   <div class="container">  
-    <div class="row"><span class="badge bg-primary">Objects</span></div>
-    <div id="pools">
-    {% for p in form.pools %}
-    <div class="row g-2 align-items-left">
-      <div class="col">
-        {{ p.poolName }}{{ p.LBMethod }}{{ p.Health }}
-        <button type="button" class="btn btn-outline-secondary" onclick="addServerPoolMember(0)">Add Member</button> 
+    <div class="row"><span class="badge bg-primary">VPN Config (Phase 1)</span></div>
+    <div class="mb-3">
+      <div id="vpnconf1">
+        <div class="row g-2 align-items-left">
+          <div class="col">
+            {{ form.vpnName }}
+            {{ form.peerIP }}
+            {{ form.p1PSK }}
+            {{ form.p1Hash }}
+            {{ form.p1Crypt }}
+            {{ form.p1DHgroup }}
+            {{ form.p1Lifetime }}
+        </div>
+        </div>
       </div>
     </div>
-    <div id="poolmembers0">
-      {% for m in p.members %}
-        {{ m.memberIP }}
-        {{ m.memberPort }}
+  </div>
+  <div class="container">  
+    <div class="row"><span class="badge bg-primary">VPN Config (Phase 2)</span></div>
+    <div class="mb-3">
+      <div id="vpnconf1">
+        <div class="row g-2 align-items-left">
+          <div class="col">
+          {{ form.p2transform }}
+          {{ form.p2lifetime }}
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">  
+    <div class="row"><span class="badge bg-primary">Objects</span></div>
+    <div id="objectgroups">
+    {% for o in form.objvpngroups %}
+    <div class="row g-2 align-items-left">
+      <div class="col">
+        {{ o.objName }}
+        <button type="button" class="btn btn-outline-secondary" onclick="addObjGrpMember({{loop.index}})">Add Object</button> 
+      </div>
+    </div>
+    <div id="objects{{ loop.index }}">
+      {% for obj in o.objectList %}
+        {{ obj.objectIP }}
+        {{ obj.objectMask }}
       {% endfor %}
     {% endfor %}
     </div>
   </div>
   <div class="container">  
-    <div class="row"><span class="badge bg-primary">Access Rules</span></div>
-    <div id="virtuals">
-    {% for v in form.virtuals %}
-      {{ v.virtualName }}
-      {{ v.destination }}
-      {{ v.serviceport }}
-      {{ v.SSLProfile }}
-      {{ v.SNAT }}
-      {{ v.rules }}
-      {{ v.defaultPool }}
-      {{ v.persistence }}
+    <div class="row"><span class="badge bg-primary">Interface Access Rules</span></div>
+    <div id="ACLs">
+    {% for acl in form.aclrules %}
+      {{ acl.ruleName }}
+      {{ acl.ruleAction }}
+      {{ acl.protocol }}
+      {{ acl.source }}
+      {{ acl.destination }}
+      {{ acl.port }}
+      
     {% endfor %}
+    </div>
+  </div>
+  <div class="container">  
+    <div class="row"><span class="badge bg-primary">NAT</span></div>
+    <div id="nats">
+      <div class="input-group mb-1">
+        <span class="input-group-text" id="basic-addon1">{{ form.noNat.label }} </span>{{ form.noNat }}
+      </div>
     </div>
     {{ form.submit }}
   </div>

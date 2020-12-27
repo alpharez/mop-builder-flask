@@ -56,7 +56,7 @@ Click Finished
 {% endfor %}
 
 
-{% for virtual in form.virtuals.data -%}
+{% for virtual in form.virtuals.data %}
 Local Traffic  ››  Virtual Servers : Virtual Server List  ››  New Virtual Server...
 Name: {{ virtual.virtualName }}
 Destination Address: {{ virtual.destination }}
