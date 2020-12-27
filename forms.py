@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FieldList, TextField, Form, FormField, SelectField, DateTimeField, HiddenField, IntegerField, BooleanField
 from datetime import datetime
+import sys
+sys.path.append('/home/site/wwwroot')
 
 
 class DeviceForm(Form):
