@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, FieldList, TextField, Form, FormField, SelectField
+from wtforms import StringField, SubmitField, FieldList, TextField, Form, FormField, SelectField, DateTimeField, HiddenField
+from datetime import datetime
 
 
 class DeviceForm(Form):
@@ -72,6 +73,7 @@ class LBForm(FlaskForm):
     pools = FieldList(FormField(PoolForm), min_entries=1)
     profiles = FieldList(FormField(SSLProfileForm), min_entries=0)
     virtuals = FieldList(FormField(VirtualForm), min_entries=1)
+    timestamp = HiddenField('timestamp', default=datetime.utcnow)
     submit = SubmitField('Submit', render_kw={
                          'class': 'btn btn-outline-secondary'})
 
@@ -91,5 +93,6 @@ class FWForm(FlaskForm):
         'class': 'form-control-sm', 'placeholder': 'Partition'})
     objgroups = FieldList(FormField(PoolForm), min_entries=1)
     aclrules = FieldList(FormField(VirtualForm), min_entries=1)
+    timestamp = HiddenField('timestamp', default=datetime.utcnow)
     submit = SubmitField('Submit', render_kw={
                          'class': 'btn btn-outline-secondary'})
