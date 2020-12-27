@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block header %}
+  <title>{% block title %}mopr{% endblock %}</title>
+{% endblock %}
+
+{% block content %}
+
+<ul class="nav flex-column">
+  <li class="nav-item">
+    <a class="nav-link active" href='/f5form'>Load Balancer</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href='/fwform'>Firewall</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href='/f5form'>Router/Switch</a>
+  </li>
+
+</ul>
+
+{% endblock %}

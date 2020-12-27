@@ -1,0 +1,100 @@
+<pre>
+<code>
+MOP COMPLETED for {{ form.changeID.data }}
+
+ ####################
+
+####MOP BEGIN####
+
+Device(s):
+
+{% for device in form.devices.data -%}
+     {{ device.deviceName }} - {{ device.deviceIP }}
+{% endfor %}
+Communication:**
+   ** pre Change communication info **
+
+PreCheck:**
+
+########## Execution Steps ##########
+All changes should be made via the GUI
+     - RDP to Jump Server
+     - Launch Internet Browser
+     - Connect to https://{{ form.devices[0].data.deviceIP }}
+     - At security certificate warning page select "Continue to this website (not recommended)."
+     - Log in using your Unix (ldap) credentials
+     - Confirm that load balancer is still the Active load balancer in the pair (if not, log out and connect to the other LB in the pair).
+     - Select the appropriate partition in the drop-down menu (if applicable)
+
+     Make a backup of the current Load Balancer configuration.
+     Option 1. Use the Archive tool to make a backup of the config via the GUI
+        System >> Archives
+             Click "Create"
+             File Name: {{ form.changeID.data }}-Pre
+
+Partition: {{ form.partition.data }}
+
+{% for pool in form.pools.data -%}
+Local Traffic  ››  Pools : Pool List  ››  New Pool...
+Name: {{ pool.poolName }}
+Health Monitors: {{ pool.Health }}
+Load Balancing Method: {{ pool.LBMethod }}
+New Members
+{% for member in pool.members -%}
+  {{ member.memberIP }} {{ member.memberPort }}
+{% endfor %}
+Click Finished
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+Local Traffic  ››  Virtual Servers : Virtual Server List  ››  New Virtual Server...
+Name: {{ virtual.virtualName }}
+Destination Address: {{ virtual.destination }}
+Service Port: {{ virtual.serviceport }}
+SSL Profile (Client): {{ virtual.SSLProfile }}
+Source Address Translation: {{ virtual.SNAT }}
+iRules: {{ virtual.rules }}
+Default Pool: {{ virtual.defaultPool }}
+Default Persistence Profile: {{ virtual.persistence }}
+Click Finished
+{% endfor %}
+
+########## MOP END ##########
+
+Validation:**
+
+{% for pool in form.pools.data -%}
+show ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+show ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+Documentation:
+
+{% for pool in form.pools.data -%}
+list ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+list ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+Communication:**
+    {{ form.customerEmail.data }} {{ form.customerPhone.data }}
+
+========== Contingency/Backout Plan ==========
+
+{% for pool in form.pools.data -%}
+delete ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+delete ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+
+========== Created by MOPR <<datestamp>>
+</code>
+</pre>

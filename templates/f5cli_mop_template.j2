@@ -1,0 +1,72 @@
+<pre>
+MOP COMPLETED for {{ form.changeID.data }}
+
+ ####################
+
+####MOP BEGIN####
+
+Device(s):
+
+{% for device in form.devices.data -%}
+     {{ device.deviceName }} - {{ device.deviceIP }}
+{% endfor %}
+Communication:**
+   ** pre Change communication info **
+
+PreCheck:**
+
+########## Execution Steps ##########
+
+save sys ucs Pre-{{ form.changeID.data }}
+
+cd {{ form.partition.data }}
+
+create ltm profile http HTTP-REWRITE redirect-rewrite all defaults-from /Common/http
+{% for pool in form.pools.data -%}
+create ltm pool {{ pool.poolName }} load-balancing-mode {{ pool.LBMethod }} monitor {{ pool.Health }} members add { {% for member in pool.members -%} {{ member.memberIP }}:{{ member.memberPort }}{% endfor %} }
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+create ltm virtual {{ virtual.virtualName }} destination {{ virtual.destination }}:{{ virtual.serviceport }} pool {{ virtual.defaultPool }} rules { {{ virtual.rules }} } persist  replace-all-with { {{ virtual.persistence }} }
+{% endfor %}
+
+
+
+########## MOP END ##########
+
+Validation:**
+
+{% for pool in form.pools.data -%}
+show ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+show ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+Documentation:
+
+{% for pool in form.pools.data -%}
+list ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+list ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+Communication:**
+    {{ form.customerEmail.data }} {{ form.customerPhone.data }}
+
+========== Contingency/Backout Plan ==========
+
+{% for pool in form.pools.data -%}
+delete ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+delete ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+========== Created by MOPR <<datestamp>>
+</pre>
+

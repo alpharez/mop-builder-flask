@@ -1,0 +1,51 @@
+MOP COMPLETED for {{CRQ}}
+ ####################
+
+####MOP BEGIN####
+
+Device(s):
+{{ device_name_pri }}
+{{ device_name_sec }}
+
+Communication:**
+   <pre CRQ communication info>
+
+PreCheck:**
+
+########## Execution Steps ##########
+s0 goto {{ device_name_pri }}
+config t
+
+{% for acl in acls -%}
+access-list {{ acl['acl_name'] }} extended {{acl['action'] }} {{ acl['protocol'] }} {{ acl['source'] }} {{ acl['destination'] }} eq {{ acl['port'] }}
+{% endfor %}
+end
+wr mem
+exit
+########## MOP END ##########
+
+Validation:**
+
+{% for acl in acls -%}
+packet-tracer input {{ acl['interface'] }} {{acl['protocol']}} {{ acl['source'] }} 2020 {{ acl['destination'] }} {{ acl['port'] }}
+{% endfor %}
+Documentation:
+
+{% for acl in acls -%}
+show run access-list {{ acl['acl_name'] }} | i {{acl['protocol']}}.*{{ acl['source'] }}.*{{ acl['destination'] }}.*{{ acl['port'] }}
+{% endfor %}
+Communication:**
+    {{ customer_email }} {{ customer_phone }}
+
+========== Contingency/Backout Plan ==========
+s0 goto {{ device_name_pri }}
+config t
+
+{% for acl in acls -%}
+no access-list {{ acl['acl_name'] }} extended {{acl['action'] }} {{ acl['protocol'] }} {{ acl['source'] }} {{ acl['destination'] }} eq {{ acl['port'] }}
+{% endfor %}
+end
+wr mem
+exit
+
+========== Created by MOPR <<datestamp>>

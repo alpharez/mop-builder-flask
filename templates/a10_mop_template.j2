@@ -1,0 +1,85 @@
+<pre>
+MOP COMPLETED for {{ form.changeID.data }}
+
+ ####################
+
+####MOP BEGIN####
+
+Device(s):
+
+{% for device in form.devices.data -%}
+     {{ device.deviceName }} - {{ device.deviceIP }}
+{% endfor %}
+Communication:**
+   ** pre Change communication info **
+
+PreCheck:**
+
+########## Execution Steps ##########
+ssh {{ form.devices[0].data.deviceIP }}
+enable
+active-partition {{ form.partition.data }}
+config t
+
+
+{% for pool in form.pools.data -%}
+slb service-group {{ pool.poolName }} tcp
+  method {{ pool.LBMethod }}
+  health-check {{ pool.Health }}
+{% for member in pool.members -%}
+  member ip-{{ member.memberIP }} {{ member.memberPort }}
+{% endfor %}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+slb virtual-server {{ virtual.virtualName }} {{ virtual.destination }}
+  port {{ virtual.serviceport }} http
+    aflex {{ virtual.rules }}
+    service-group {{ virtual.defaultPool }}
+    template persist {{ virtual.persistence }}
+    template client-ssl {{ virtual.SSLProfile }}
+{% endfor %}
+
+Once all changes have been completed, synchronize the configuration to the standby load balancer:
+     active-partition shared
+	 config t
+	 config sync all partition {{ form.partition.data }} STANDBY_IP
+     exit
+
+########## MOP END ##########
+
+Validation:**
+
+{% for pool in form.pools.data -%}
+show slb service-group {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+show slb virtual {{ virtual.virtualName }}
+{% endfor %}
+
+Documentation:
+
+{% for pool in form.pools.data -%}
+show run slb service-group {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+show run slb virtual {{ virtual.virtualName }}
+{% endfor %}
+
+Communication:**
+    {{ form.customerEmail.data }} {{ form.customerPhone.data }}
+
+========== Contingency/Backout Plan ==========
+
+{% for pool in form.pools.data -%}
+delete ltm pool {{ pool.poolName }}
+{% endfor %}
+
+{% for virtual in form.virtuals.data -%}
+delete ltm virtual {{ virtual.virtualName }}
+{% endfor %}
+
+========== Created by MOPR <<datestamp>>
+</pre>
