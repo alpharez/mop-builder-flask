@@ -104,9 +104,11 @@ class ACLForm(Form):
     lineNum = IntegerField('line num', render_kw={
                            'class': 'form-control-sm', 'placeholder': 'Rule Number'})
     ruleAction = SelectField('Select Action', choices=[
-        ('permit', 'permit'), ('deny', 'deny')])
+        ('permit', 'permit'), ('deny', 'deny')], render_kw={
+        'class': 'form-control-sm'})
     protocol = SelectField('Select Protocol', choices=[
-        ('tcp', 'tcp'), ('udp', 'udp'), ('ip', 'ip'), ('icmp', 'icmp')])
+        ('tcp', 'tcp'), ('udp', 'udp'), ('ip', 'ip'), ('icmp', 'icmp')], render_kw={
+        'class': 'form-control-sm'})
     source = StringField('source', render_kw={
         'class': 'form-control-sm', 'placeholder': 'Source'})
     destination = StringField('change ID', render_kw={
@@ -137,7 +139,7 @@ class FWForm(FlaskForm):
 class FWVPNForm(FWForm):
     vpnName = StringField('Peer IP', render_kw={
         'class': 'form-control-sm', 'placeholder': 'VPN Name'})
-    objvpngroups = FieldList(FormField(ObjGrpForm), min_entries=2)
+    objvpngroups = FieldList(FormField(ObjGrpForm), min_entries=1)
     peerIP = StringField('Peer IP', render_kw={
         'class': 'form-control-sm', 'placeholder': 'VPN Peer IP'})
     p1PSK = StringField('Peer IP', render_kw={

@@ -1,82 +1,78 @@
 {% extends "base.html" %}
 
 {% block header %}
-  <title>{% block title %}mopr{% endblock %}</title>
+<title>{% block title %}mopr{% endblock %}</title>
 {% endblock %}
 
 {% block content %}
 
 <script>
-  
+
   function addDevice() {
     var lastDeviceID = $("#devices input:last").attr("id");
     var num = parseInt(lastDeviceID.match(/\d+/)[0])
     num = num + 1
-    var newDeviceName = "devices-"+num+"-deviceName"
-    var newDeviceIP = "devices-"+num+"-deviceIP"
+    var newDeviceName = "devices-" + num + "-deviceName"
+    var newDeviceIP = "devices-" + num + "-deviceIP"
 
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newDeviceName}' name='${newDeviceName}' value='' placeholder='Device Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newDeviceIP}' name='${newDeviceIP}' value='' placeholder='Device IP'></input>`
-      +`</div></div>`
+      + `<input class='form-control-sm' type='text' id='${newDeviceName}' name='${newDeviceName}' value='' placeholder='Device Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newDeviceIP}' name='${newDeviceIP}' value='' placeholder='Device IP'></input>`
+      + `</div></div>`
     $("#devices").append(newInput);
   }
 
   function addObjGrpMember(num) {
     // pools-0-members-0-memberIP   // pools-0-members-0-memberPort
     // figure out which button got pressed, then add a new member to that pool
-    var poolmembersdiv = `#poolmembers${num}`
-    var lastPoolMemberID = $(`${poolmembersdiv} input:last`).attr("id");
-    //alert(lastPoolMemberID)
-    var lastPoolnum = parseInt(lastPoolMemberID.match(/\d+/)[0])
-    lastPoolnum = lastPoolnum + 1
-    var newPoolMemberIP = `pools-${num}-members-${lastPoolnum}-memberIP`
-    var newPoolMemberPort = `pools-${num}-members-${lastPoolnum}-memberPort`
+    var objmembersdiv = `#objects${num}`
+    var lastObjMemberID = $(`${objmembersdiv} input:last`).attr("id");
+    //alert(lastObjMemberID)
+    var lastObjnum = parseInt(lastObjMemberID.match(/\d+/)[0])
+    lastObjnum = lastObjnum + 1
+    var newObjMemberIP = `objvpngroups-${num}-objectList-${lastObjnum}-objectIP`
+    var newObjMemberMask = `objvpngroups-${num}-objectList-${lastObjnum}-objectMask`
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newPoolMemberIP}' name='${newPoolMemberIP}' value='' placeholder='Member IP'></input>`
-      +`<input class='form-control-sm' type='text' id='${newPoolMemberPort}' name='${newPoolMemberPort}' value='' placeholder='Member Port'></input>`
-    $(poolmembersdiv).append(newInput);
+      + `<input class='form-control-sm' type='text' id='${newObjMemberIP}' name='${newObjMemberIP}' value='' placeholder='IP'></input>`
+      + `<input class='form-control-sm' type='text' id='${newObjMemberMask}' name='${newObjMemberMask}' value='' placeholder='Mask'></input>`
+    $(objmembersdiv).append(newInput);
 
   }
 
   function addObjGroup() {
-    var lastPoolID = $("#pools input:last").attr("id");
-    var num = parseInt(lastPoolID.match(/\d+/)[0])
+    var lastObjGrpID = $("#objectgroups input:last").attr("id");
+    var num = parseInt(lastObjGrpID.match(/\d+/)[0])
     num = num + 1
-    var newPoolName = "pools-"+num+"-poolName"
-    var newPoolMethod = "pools-"+num+"-LBMethod"
-    var newPoolHealth = "pools-"+num+"-Health"
+    var newObjGrpName = "objvpngroups-" + num + "-objName"
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newPoolName}' name='${newPoolName}' value='' placeholder='Pool Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newPoolMethod}' name='${newPoolMethod}' value='' placeholder='LB Method'></input>`
-      +`<input class='form-control-sm' type='text' id='${newPoolHealth}' name='${newPoolHealth}' value='' placeholder='Health Monitor'></input>`
-      +`<button type="button" id="addPoolMember" class="btn btn-outline-secondary" onclick="addServerPoolMember(${num})">Add Member</button>`
-      +`<div id="poolmembers${num}">`
-      +`<input class='form-control-sm' type='text' id='pools-${num}-members-0-memberIP' name='pools-${num}-members-0-memberIP' value='' placeholder='Member IP'></input>`
-      +`<input class='form-control-sm' type='text' id='pools-${num}-members-0-memberPort' name='pools-${num}-members-0-memberPort' value='' placeholder='Member Port'></input>`
-      +`</div>`
-      +`</div></div>`
-    $("#pools").append(newInput);
+      + `<input class='form-control-sm' type='text' id='${newObjGrpName}' name='${newObjGrpName}' value='' placeholder='Object Group Name'></input>`
+      + `<button type="button" id="addObjectGroupMember" class="btn btn-outline-secondary" onclick="addObjGrpMember(${num})">Add Object</button>`
+      + `<div id="objects${num}">`
+      + `<input class='form-control-sm' type='text' id='objvpngroups-${num}-objectList-0-objectIP' name='objvpngroups-${num}-objectList-0-objectIP' value='' placeholder='IP'></input>`
+      + `<input class='form-control-sm' type='text' id='objvpngroups-${num}-objectList-0-objectMask' name='objvpngroups-${num}-objectList-0-objectMask' value='' placeholder='Mask'></input>`
+      + `</div>`
+      + `</div></div>`
+    $("#objectgroups").append(newInput);
   }
 
   function addAccessRule() {
     var lastACLID = $("#ACLs input:last").attr("id");
     var num = parseInt(lastACLID.match(/\d+/)[0])
     num = num + 1
-    var newACLName = "aclrules-"+num+"-ruleName"
-    var newACLAction = "aclrules-"+num+"-ruleAction"
-    var newACLprotocol = "aclrules-"+num+"-protocol"
-    var newACLsource = "aclrules-"+num+"-source"
-    var newACLdestination = "aclrules-"+num+"-destination"
-    var newACLport = "aclrules-"+num+"-port"
+    var newACLName = "aclrules-" + num + "-ruleName"
+    var newACLAction = "aclrules-" + num + "-ruleAction"
+    var newACLprotocol = "aclrules-" + num + "-protocol"
+    var newACLsource = "aclrules-" + num + "-source"
+    var newACLdestination = "aclrules-" + num + "-destination"
+    var newACLport = "aclrules-" + num + "-port"
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newACLName}' name='${newACLName}' value='' placeholder='Rule'></input>`
-      +`<input class='form-control-sm' type='select' id='${newACLAction}' name='${newACLAction}' value='' placeholder='Action'></input>`
-      +`<input class='form-control-sm' type='select' id='${newACLprotocol}' name='${newACLprotocol}' value='' placeholder='Protocol'></input>`
-      +`<input class='form-control-sm' type='text' id='${newACLsource}' name='${newACLsource}' value='' placeholder='Source'></input>`
-      +`<input class='form-control-sm' type='text' id='${newACLdestination}' name='${newACLdestination}' value='' placeholder='Destination'></input>`
-      +`<input class='form-control-sm' type='text' id='${newACLport}' name='${newACLport}' value='' placeholder='Port'></input>`
-      +`</div></div>`
+      + `<input class='form-control-sm' type='text' id='${newACLName}' name='${newACLName}' value='' placeholder='Rule Name'></input>`
+      + `<select class='form-control-sm' type='select' id='${newACLAction}' name='${newACLAction}' value='' placeholder='Action'><option value="permit">permit</option><option value="deny">deny</option></select>`
+      + `<select class='form-control-sm' type='select' id='${newACLprotocol}' name='${newACLprotocol}' value='' placeholder='Protocol'><option value="tcp">tcp</option><option value="udp">udp</option><option value="ip">ip</option><option value="icmp">icmp</option></select>`
+      + `<input class='form-control-sm' type='text' id='${newACLsource}' name='${newACLsource}' value='' placeholder='Source'></input>`
+      + `<input class='form-control-sm' type='text' id='${newACLdestination}' name='${newACLdestination}' value='' placeholder='Destination'></input>`
+      + `<input class='form-control-sm' type='text' id='${newACLport}' name='${newACLport}' value='' placeholder='Port'></input>`
+      + `</div></div>`
     $("#ACLs").append(newInput);
   }
 </script>
@@ -89,100 +85,107 @@
     <div class="mb-3">
       {{ form.LBType }}
     </div>
-  <div class="container">  
-    <div class="mb-3">
-      <div id="buttons">
-        <button type="button" id="addLB" class="btn btn-outline-secondary" onclick="addDevice()">Add FW Device</button> 
-        <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addAccessRule()">Add Access Rule</button> 
+    <div class="container">
+      <div class="mb-3">
+        <div id="buttons">
+          <button type="button" id="addLB" class="btn btn-outline-secondary" onclick="addDevice()">Add FW
+            Device</button>
+          <button type="button" id="addObjGrp" class="btn btn-outline-secondary" onclick="addObjGroup()">Add Object
+            Group</button>
+          <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addAccessRule()">Add Access
+            Rule</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Devices</span></div>
-    <div class="mb-3">
-      <div id="devices">
-      {% for d in form.devices %}
-        <div class="row g-2 align-items-left">
-          <div class="col">
-            {{ d.deviceName }}
-            {{ d.deviceIP }}
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">Devices</span></div>
+      <div class="mb-3">
+        <div id="devices">
+          {% for d in form.devices %}
+          <div class="row g-2 align-items-left">
+            <div class="col">
+              {{ d.deviceName }}
+              {{ d.deviceIP }}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">VPN Config (Phase 1)</span></div>
+      <div class="mb-3">
+        <div id="vpnconf1">
+          <div class="row g-2 align-items-left">
+            <div class="col">
+              {{ form.vpnName }}
+              {{ form.peerIP }}
+              {{ form.p1PSK }}
+              {{ form.p1Hash }}
+              {{ form.p1Crypt }}
+              {{ form.p1DHgroup }}
+              {{ form.p1Lifetime }}
+            </div>
           </div>
         </div>
-      {% endfor %}
       </div>
     </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">VPN Config (Phase 1)</span></div>
-    <div class="mb-3">
-      <div id="vpnconf1">
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">VPN Config (Phase 2)</span></div>
+      <div class="mb-3">
+        <div id="vpnconf1">
+          <div class="row g-2 align-items-left">
+            <div class="col">
+              {{ form.p2transform }}
+              {{ form.p2lifetime }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">Objects</span></div>
+      <div id="objectgroups">
         <div class="row g-2 align-items-left">
           <div class="col">
-            {{ form.vpnName }}
-            {{ form.peerIP }}
-            {{ form.p1PSK }}
-            {{ form.p1Hash }}
-            {{ form.p1Crypt }}
-            {{ form.p1DHgroup }}
-            {{ form.p1Lifetime }}
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">VPN Config (Phase 2)</span></div>
-    <div class="mb-3">
-      <div id="vpnconf1">
-        <div class="row g-2 align-items-left">
-          <div class="col">
-          {{ form.p2transform }}
-          {{ form.p2lifetime }}
-        </div>
+            {% for o in form.objvpngroups %}
+
+            {{ o.objName }}
+            <button type="button" class="btn btn-outline-secondary" onclick="addObjGrpMember(0)">Add
+              Object</button>
+            <div id="objects0">
+              {% for obj in o.objectList %}
+              {{ obj.objectIP }}
+              {{ obj.objectMask }}
+              {% endfor %}
+              {% endfor %}
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Objects</span></div>
-    <div id="objectgroups">
-    {% for o in form.objvpngroups %}
-    <div class="row g-2 align-items-left">
-      <div class="col">
-        {{ o.objName }}
-        <button type="button" class="btn btn-outline-secondary" onclick="addObjGrpMember({{loop.index}})">Add Object</button> 
+      <div class="container">
+        <div class="row"><span class="badge bg-primary">Interface Access Rules</span></div>
+        <div id="ACLs">
+          {% for acl in form.aclrules %}
+          {{ acl.ruleName }}
+          {{ acl.ruleAction }}
+          {{ acl.protocol }}
+          {{ acl.source }}
+          {{ acl.destination }}
+          {{ acl.port }}
+
+          {% endfor %}
+        </div>
       </div>
-    </div>
-    <div id="objects{{ loop.index }}">
-      {% for obj in o.objectList %}
-        {{ obj.objectIP }}
-        {{ obj.objectMask }}
-      {% endfor %}
-    {% endfor %}
-    </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Interface Access Rules</span></div>
-    <div id="ACLs">
-    {% for acl in form.aclrules %}
-      {{ acl.ruleName }}
-      {{ acl.ruleAction }}
-      {{ acl.protocol }}
-      {{ acl.source }}
-      {{ acl.destination }}
-      {{ acl.port }}
-      
-    {% endfor %}
-    </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">NAT</span></div>
-    <div id="nats">
-      <div class="input-group mb-1">
-        <span class="input-group-text" id="basic-addon1">{{ form.noNat.label }} </span>{{ form.noNat }}
+      <div class="container">
+        <div class="row"><span class="badge bg-primary">NAT</span></div>
+        <div id="nats">
+          <div class="input-group mb-1">
+            <span class="input-group-text" id="basic-addon1">{{ form.noNat.label }} </span>{{ form.noNat }}
+          </div>
+        </div>
+        {{ form.submit }}
       </div>
-    </div>
-    {{ form.submit }}
-  </div>
-  </form>
-  {% endblock %}
+</form>
+{% endblock %}
