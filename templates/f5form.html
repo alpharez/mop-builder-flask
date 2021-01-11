@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block header %}
-  <title>{% block title %}mopr{% endblock %}</title>
+<title>{% block title %}mopr{% endblock %}</title>
 {% endblock %}
 
 {% block content %}
 
 <script>
-  
+
   function addDevice() {
     var lastDeviceID = $("#devices input:last").attr("id");
     var num = parseInt(lastDeviceID.match(/\d+/)[0])
     num = num + 1
-    var newDeviceName = "devices-"+num+"-deviceName"
-    var newDeviceIP = "devices-"+num+"-deviceIP"
+    var newDeviceName = "devices-" + num + "-deviceName"
+    var newDeviceIP = "devices-" + num + "-deviceIP"
 
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newDeviceName}' name='${newDeviceName}' value='' placeholder='Device Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newDeviceIP}' name='${newDeviceIP}' value='' placeholder='Device IP'></input>`
-      +`</div></div>`
+      + `<input class='form-control-sm' type='text' id='${newDeviceName}' name='${newDeviceName}' value='' placeholder='Device Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newDeviceIP}' name='${newDeviceIP}' value='' placeholder='Device IP'></input>`
+      + `</div></div>`
     $("#devices").append(newInput);
   }
 
@@ -33,8 +33,8 @@
     var newPoolMemberIP = `pools-${num}-members-${lastPoolnum}-memberIP`
     var newPoolMemberPort = `pools-${num}-members-${lastPoolnum}-memberPort`
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newPoolMemberIP}' name='${newPoolMemberIP}' value='' placeholder='Member IP'></input>`
-      +`<input class='form-control-sm' type='text' id='${newPoolMemberPort}' name='${newPoolMemberPort}' value='' placeholder='Member Port'></input>`
+      + `<input class='form-control-sm' type='text' id='${newPoolMemberIP}' name='${newPoolMemberIP}' value='' placeholder='Member IP'></input>`
+      + `<input class='form-control-sm' type='text' id='${newPoolMemberPort}' name='${newPoolMemberPort}' value='' placeholder='Member Port'></input>`
     $(poolmembersdiv).append(newInput);
 
   }
@@ -43,19 +43,19 @@
     var lastPoolID = $("#pools input:last").attr("id");
     var num = parseInt(lastPoolID.match(/\d+/)[0])
     num = num + 1
-    var newPoolName = "pools-"+num+"-poolName"
-    var newPoolMethod = "pools-"+num+"-LBMethod"
-    var newPoolHealth = "pools-"+num+"-Health"
+    var newPoolName = "pools-" + num + "-poolName"
+    var newPoolMethod = "pools-" + num + "-LBMethod"
+    var newPoolHealth = "pools-" + num + "-Health"
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newPoolName}' name='${newPoolName}' value='' placeholder='Pool Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newPoolMethod}' name='${newPoolMethod}' value='' placeholder='LB Method'></input>`
-      +`<input class='form-control-sm' type='text' id='${newPoolHealth}' name='${newPoolHealth}' value='' placeholder='Health Monitor'></input>`
-      +`<button type="button" id="addPoolMember" class="btn btn-outline-secondary" onclick="addServerPoolMember(${num})">Add Member</button>`
-      +`<div id="poolmembers${num}">`
-      +`<input class='form-control-sm' type='text' id='pools-${num}-members-0-memberIP' name='pools-${num}-members-0-memberIP' value='' placeholder='Member IP'></input>`
-      +`<input class='form-control-sm' type='text' id='pools-${num}-members-0-memberPort' name='pools-${num}-members-0-memberPort' value='' placeholder='Member Port'></input>`
-      +`</div>`
-      +`</div></div>`
+      + `<input class='form-control-sm' type='text' id='${newPoolName}' name='${newPoolName}' value='' placeholder='Pool Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newPoolMethod}' name='${newPoolMethod}' value='' placeholder='LB Method'></input>`
+      + `<input class='form-control-sm' type='text' id='${newPoolHealth}' name='${newPoolHealth}' value='' placeholder='Health Monitor'></input>`
+      + `<button type="button" id="addPoolMember" class="btn btn-outline-secondary" onclick="addServerPoolMember(${num})">Add Member</button>`
+      + `<div id="poolmembers${num}">`
+      + `<input class='form-control-sm' type='text' id='pools-${num}-members-0-memberIP' name='pools-${num}-members-0-memberIP' value='' placeholder='Member IP'></input>`
+      + `<input class='form-control-sm' type='text' id='pools-${num}-members-0-memberPort' name='pools-${num}-members-0-memberPort' value='' placeholder='Member Port'></input>`
+      + `</div>`
+      + `</div></div>`
     $("#pools").append(newInput);
   }
 
@@ -67,16 +67,16 @@
       var num = parseInt(lastProfileID.match(/\d+/)[0])
       num = num + 1
     }
-    var newProfileName = "profiles-"+num+"-profileName"
-    var newCertName = "profiles-"+num+"-certName"
-    var newKeyName = "profiles-"+num+"-keyName"
-    var newChainCertName = "profiles-"+num+"-chainCertName"
+    var newProfileName = "profiles-" + num + "-profileName"
+    var newCertName = "profiles-" + num + "-certName"
+    var newKeyName = "profiles-" + num + "-keyName"
+    var newChainCertName = "profiles-" + num + "-chainCertName"
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newProfileName}' name='${newProfileName}' value='' placeholder='Profile Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newCertName}' name='${newCertName}' value='' placeholder='Certificate Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newKeyName}' name='${newKeyName}' value='' placeholder='Key Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newChainCertName}' name='${newChainCertName}' value='' placeholder='Chain Cert Name'></input>`      
-      +`</div></div>`
+      + `<input class='form-control-sm' type='text' id='${newProfileName}' name='${newProfileName}' value='' placeholder='Profile Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newCertName}' name='${newCertName}' value='' placeholder='Certificate Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newKeyName}' name='${newKeyName}' value='' placeholder='Key Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newChainCertName}' name='${newChainCertName}' value='' placeholder='Chain Cert Name'></input>`
+      + `</div></div>`
     $("#profiles").append(newInput);
   }
 
@@ -85,24 +85,24 @@
     var lastVIPID = $("#virtuals input:last").attr("id");
     var num = parseInt(lastVIPID.match(/\d+/)[0])
     num = num + 1
-    var newVIPName = "virtuals-"+num+"-virtualName"
-    var newVIPDest = "virtuals-"+num+"-destination"
-    var newVIPService = "virtuals-"+num+"-serviceport"
-    var newVIPSSLProfile = "virtuals-"+num+"-SSLProfile"
-    var newVIPSNAT = "virtuals-"+num+"-SNAT"
-    var newVIPrules = "virtuals-"+num+"-rules"
-    var newVIPdefaultPool = "virtuals-"+num+"-defaultPool"
-    var newVIPpersistence = "virtuals-"+num+"-persistence"
+    var newVIPName = "virtuals-" + num + "-virtualName"
+    var newVIPDest = "virtuals-" + num + "-destination"
+    var newVIPService = "virtuals-" + num + "-serviceport"
+    var newVIPSSLProfile = "virtuals-" + num + "-SSLProfile"
+    var newVIPSNAT = "virtuals-" + num + "-SNAT"
+    var newVIPrules = "virtuals-" + num + "-rules"
+    var newVIPdefaultPool = "virtuals-" + num + "-defaultPool"
+    var newVIPpersistence = "virtuals-" + num + "-persistence"
     var newInput = `<div class='row g-2 align-items-left'><div class='col'>`
-      +`<input class='form-control-sm' type='text' id='${newVIPName}' name='${newVIPName}' value='' placeholder='Virtual Name'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPDest}' name='${newVIPDest}' value='' placeholder='Destination'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPService}' name='${newVIPService}' value='' placeholder='Service Port'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPSSLProfile}' name='${newVIPSSLProfile}' value='' placeholder='SSL Profile'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPSNAT}' name='${newVIPSNAT}' value='' placeholder='Source Address Translation'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPrules}' name='${newVIPrules}' value='' placeholder='Rules'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPdefaultPool}' name='${newVIPdefaultPool}' value='' placeholder='Default Server Pool'></input>`
-      +`<input class='form-control-sm' type='text' id='${newVIPpersistence}' name='${newVIPpersistence}' value='' placeholder='Persistence'></input>`
-      +`</div></div>`
+      + `<input class='form-control-sm' type='text' id='${newVIPName}' name='${newVIPName}' value='' placeholder='Virtual Name'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPDest}' name='${newVIPDest}' value='' placeholder='Destination'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPService}' name='${newVIPService}' value='' placeholder='Service Port'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPSSLProfile}' name='${newVIPSSLProfile}' value='' placeholder='SSL Profile'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPSNAT}' name='${newVIPSNAT}' value='' placeholder='Source Address Translation'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPrules}' name='${newVIPrules}' value='' placeholder='Rules'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPdefaultPool}' name='${newVIPdefaultPool}' value='' placeholder='Default Server Pool'></input>`
+      + `<input class='form-control-sm' type='text' id='${newVIPpersistence}' name='${newVIPpersistence}' value='' placeholder='Persistence'></input>`
+      + `</div></div>`
     $("#virtuals").append(newInput);
   }
 </script>
@@ -118,76 +118,81 @@
     <div class="mb-3">
       {{ form.partition }}
     </div>
-  <div class="container">  
-    <div class="mb-3">
-      <div id="buttons">
-        <button type="button" id="addLB" class="btn btn-outline-secondary" onclick="addDevice()">Add LB Device</button> 
-        <button type="button" id="addPool" class="btn btn-outline-secondary" onclick="addServerPool()">Add Server Pool</button> 
-        <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addVip()">Add Virtual</button> 
-        <button type="button" id="addClientSSL" class="btn btn-outline-secondary" onclick="addSSLProfile()">Add Client SSL</button> 
+    <div class="container">
+      <div class="mb-3">
+        <div id="buttons">
+          <button type="button" id="addLB" class="btn btn-outline-secondary" onclick="addDevice()">Add LB
+            Device</button>
+          <button type="button" id="addPool" class="btn btn-outline-secondary" onclick="addServerPool()">Add Server
+            Pool</button>
+          <button type="button" id="addVirtual" class="btn btn-outline-secondary" onclick="addVip()">Add
+            Virtual</button>
+          <button type="button" id="addClientSSL" class="btn btn-outline-secondary" onclick="addSSLProfile()">Add Client
+            SSL</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Devices</span></div>
-    <div class="mb-3">
-      <div id="devices">
-      {% for d in form.devices %}
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">Devices</span></div>
+      <div class="mb-3">
+        <div id="devices">
+          {% for d in form.devices %}
+          <div class="row g-2 align-items-left">
+            <div class="col">
+              {{ d.deviceName }}
+              {{ d.deviceIP }}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">Pools</span></div>
+      <div id="pools">
+        {% for p in form.pools %}
         <div class="row g-2 align-items-left">
           <div class="col">
-            {{ d.deviceName }}
-            {{ d.deviceIP }}
+            {{ p.poolName }}{{ p.LBMethod }}{{ p.Health }}
+            <button type="button" class="btn btn-outline-secondary" onclick="addServerPoolMember(0)">Add Member</button>
           </div>
         </div>
-      {% endfor %}
+        <div id="poolmembers0">
+          {% for m in p.members %}
+          {{ m.memberIP }}
+          {{ m.memberPort }}
+          {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Pools</span></div>
-    <div id="pools">
-    {% for p in form.pools %}
-    <div class="row g-2 align-items-left">
-      <div class="col">
-        {{ p.poolName }}{{ p.LBMethod }}{{ p.Health }}
-        <button type="button" class="btn btn-outline-secondary" onclick="addServerPoolMember(0)">Add Member</button> 
+    <div class="container">
+      <div class="row"><span class="badge bg-primary">Profiles</span></div>
+      <div id="profiles">
+        {% for pr in form.profiles %}
+        <div class="row g-2 align-items-left">
+          <div class="col">
+            {{ pr.profileName }}{{ pr.certName }} {{ pr.keyName }} {{ pr.chainCertName }}
+          </div>
+          {% endfor %}
+        </div>
       </div>
-    </div>
-    <div id="poolmembers0">
-      {% for m in p.members %}
-        {{ m.memberIP }}
-        {{ m.memberPort }}
-      {% endfor %}
-    {% endfor %}
-    </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Profiles</span></div>
-    <div id="profiles">
-    {% for pr in form.profiles %}
-    <div class="row g-2 align-items-left">
-      <div class="col">
-        {{ pr.profileName }}{{ pr.certName }} {{ pr.keyName }} {{ pr.chainCertName }}
+      <div class="container">
+        <div class="row"><span class="badge bg-primary">Virtuals</span></div>
+        <div id="virtuals">
+          {% for v in form.virtuals %}
+          {{ v.virtualName }}
+          {{ v.destination }}
+          {{ v.serviceport }}
+          {{ v.SSLProfile }}
+          {{ v.SNAT }}
+          {{ v.rules }}
+          {{ v.defaultPool }}
+          {{ v.persistence }}
+          {% endfor %}
+        </div>
+        {{ form.timestamp}}
+        {{ form.submit }}
       </div>
-    {% endfor %}
-    </div>
-  </div>
-  <div class="container">  
-    <div class="row"><span class="badge bg-primary">Virtuals</span></div>
-    <div id="virtuals">
-    {% for v in form.virtuals %}
-      {{ v.virtualName }}
-      {{ v.destination }}
-      {{ v.serviceport }}
-      {{ v.SSLProfile }}
-      {{ v.SNAT }}
-      {{ v.rules }}
-      {{ v.defaultPool }}
-      {{ v.persistence }}
-    {% endfor %}
-    </div>
-    {{ form.timestamp}}
-    {{ form.submit }}
-  </div>
-  </form>
-  {% endblock %}
+</form>
+{% endblock %}

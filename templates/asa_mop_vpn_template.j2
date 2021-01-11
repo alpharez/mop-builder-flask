@@ -86,14 +86,13 @@ no crypto isakmp policy ** NEXTNUM **
 no tunnel-group {{ form.peerIP.data }} ipsec-attributes
 no tunnel-group {{ form.peerIP.data }}
 
-{% for objgrp in form.objvpngroups.data -%}
-no object-group network {{ objgrp.objName }}
-{% endfor %}
-
 {% if form.noNat.data %}
 no nat (**inside**,**outside**) source static {{form.objvpngroups[0].objName.data}} {{form.objvpngroups[0].objName.data}} destination static {{form.objvpngroups[1].objName.data}} {{form.objvpngroups[1].objName.data}}
 {% endif %}
 
+{% for objgrp in form.objvpngroups.data -%}
+no object-group network {{ objgrp.objName }}
+{% endfor %}
 
 end
 wr mem
