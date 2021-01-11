@@ -139,7 +139,7 @@ class FWForm(FlaskForm):
 class FWVPNForm(FWForm):
     vpnName = StringField('Peer IP', render_kw={
         'class': 'form-control-sm', 'placeholder': 'VPN Name'})
-    objvpngroups = FieldList(FormField(ObjGrpForm), min_entries=1)
+    objvpngroups = FieldList(FormField(ObjGrpForm), min_entries=2)
     peerIP = StringField('Peer IP', render_kw={
         'class': 'form-control-sm', 'placeholder': 'VPN Peer IP'})
     p1PSK = StringField('Peer IP', render_kw={

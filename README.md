@@ -8,6 +8,7 @@ https://mopr-flask.azurewebsites.net/
 - not a huge deal if not, just add the dropdowns manually
 - finish A10 and F5 cli templates
 - work on VPN templates for FTD, Palo Alto, ...
+- VPN form giving internal server error
 
 ## Future templates
 
