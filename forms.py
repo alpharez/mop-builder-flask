@@ -67,7 +67,7 @@ class LBForm(FlaskForm):
     customerPhone = StringField('change ID', render_kw={
         'class': 'form-control-sm', 'placeholder': 'Customer Phone'})
     LBType = SelectField('Select Load Balancer Type', choices=[
-                         ('select', 'Select LB Type'), ('f5', 'F5'), ('f5cli', 'F5 CLI'), ('a10', 'A10')])
+                         ('f5', 'F5'), ('f5cli', 'F5 CLI'), ('a10', 'A10')])
     devices = FieldList(FormField(DeviceForm), min_entries=1,
                         render_kw={'class': 'input-group mb-3'})
     partition = StringField('partition', render_kw={
