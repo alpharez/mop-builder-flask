@@ -33,3 +33,5 @@ def f5form():
         elif result['LBType'] == "a10":
             return render_template('a10_mop_template.j2', form=form)
     return render_template('f5form.html', form=form)
+
+app.run(host='0.0.0.0', port=8080)
